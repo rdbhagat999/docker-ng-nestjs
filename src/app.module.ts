@@ -13,7 +13,8 @@ import { UserModule } from './user/user.module';
     username: 'root',
     password: 'root',
     database: 'ngnestjs',
-    entities: [],
+    // entities: [],
+    autoLoadEntities: true, // don't use in production mode because it will always migrate database
     synchronize: true,
   }), 
   UserModule,],
@@ -21,3 +22,4 @@ import { UserModule } from './user/user.module';
   providers: [AppService],
 })
 export class AppModule {}
+

@@ -13,13 +13,13 @@ services:
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
 
-    volumes:
-      #localDirectory:ContainerDirectory
-      - .dbdata:/var/lib/mysql
-    
     ports:
       #localPort:ContainerPort
       - 33066:3306
+
+    volumes:
+      #localDirectory:ContainerDirectory
+      - .dbdata:/var/lib/mysql
   
 
   backend:
