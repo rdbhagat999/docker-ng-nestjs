@@ -17,6 +17,7 @@ import {loginDto} from "./dtos/login.dto";
 import {JwtService} from "@nestjs/jwt";
 import { Request, Response } from 'express';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller()
 export class AuthController {
 
@@ -61,7 +62,6 @@ export class AuthController {
 
     }
 
-    @UseInterceptors(ClassSerializerInterceptor)
     @Get('user')
     async user(@Req() request: Request ) {
         const token = request.cookies['token'];
@@ -71,5 +71,12 @@ export class AuthController {
             throw new NotFoundException('User not found!');
         }
         return user;
+    }
+
+
+    @Post('logout')
+    async logout(@Res({ passthrough: true }) response: Response ) {
+        response.clearCookie('token');
+        return { message: 'success' };
     }
 }
