@@ -16,6 +16,10 @@ services:
     volumes:
       #localDirectory:ContainerDirectory
       - .dbdata:/var/lib/mysql
+    
+    ports:
+      #localPort:ContainerPort
+      - 33066:3306
   
 
   backend:
