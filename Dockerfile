@@ -1,12 +1,14 @@
-FROM node:14.16
+FROM node:14-buster-slim AS builder
 
-WORKDIR /app
+ARG NODE_ENV=development
+ENV NODE_ENV=${NODE_ENV}
 
-COPY package*.json .
+WORKDIR /usr/src/app
 
-RUN npm install
+COPY package*.json /usr/src/app
 
-COPY . .
+RUN npm ci
 
-CMD ["npm run start:dev"]
+COPY . ./
 
+CMD npm run start:dev
