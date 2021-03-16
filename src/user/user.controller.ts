@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import {Request} from 'express';
 import {UserService} from "./user.service";
-import {User} from "./user";
+import {User} from "./models/user";
 import * as bcrypt from 'bcryptjs';
 import {UserCreateDto} from "./dtos/user-create.dto";
 import {AuthGuard} from "../auth/auth.guard";

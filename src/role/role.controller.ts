@@ -1,8 +1,8 @@
 import {Body, Controller, Delete, Get, Param, Post, Put, Query} from '@nestjs/common';
 import {RoleService} from "./role.service";
-import {Role} from "./role";
+import {Role} from "./models/role";
 import {UserCreateDto} from "../user/dtos/user-create.dto";
-import {User} from "../user/user";
+import {User} from "../user/models/user";
 import * as bcrypt from "bcryptjs";
 import {UserUpdateDto} from "../user/dtos/user-update.dto";
 import {RoleCreateDto} from "./dtos/role-create.dto";

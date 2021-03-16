@@ -10,7 +10,7 @@ import {
     UseInterceptors
 } from '@nestjs/common';
 import {UserService} from "../user/user.service";
-import {User} from "../user/user";
+import {User} from "../user/models/user";
 import * as bcrypt from 'bcryptjs';
 import { RegisterDto } from './dtos/register.dto';
 import {loginDto} from "./dtos/login.dto";

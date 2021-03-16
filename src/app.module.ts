@@ -9,6 +9,7 @@ import {ThrottlerGuard, ThrottlerModule} from "@nestjs/throttler";
 import {APP_GUARD} from "@nestjs/core";
 import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { PermissionModule } from './permission/permission.module';
     autoLoadEntities: true, // don't use in production mode because it will always migrate database
     synchronize: true,
   }), 
-  UserModule, AuthModule, CommonModule, RoleModule, PermissionModule,],
+  UserModule, AuthModule, CommonModule, RoleModule, PermissionModule, ProductModule,],
   controllers: [AppController],
   providers: [{
     provide: APP_GUARD,
