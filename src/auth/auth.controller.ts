@@ -68,7 +68,7 @@ export class AuthController {
     @UseGuards(AuthGuard)
     @Get('user')
     async user(@Req() request: Request ) {
-        const id = this.authService.userId(request);
+        const id = await this.authService.userId(request);
         const user = await this.userService.findOne({id}, ['role']);
         if(! user) {
             throw new NotFoundException('User not found!');

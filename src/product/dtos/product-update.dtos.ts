@@ -1,17 +1,13 @@
 import {IsNotEmpty} from "class-validator";
 
 export class ProductUpdateDto {
-    
-    @IsNotEmpty()
-    title: string;
 
-    // @IsNotEmpty()
+    title?: string;
+
     description?: string;
 
-    // @IsNotEmpty()
     image?: string;
 
-    @IsNotEmpty()
-    price: string;
+    price?: string;
 
 }

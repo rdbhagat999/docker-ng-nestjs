@@ -1,9 +1,24 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Put,
+    Query,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
 import { ProductCreateDto } from './dtos/product-create.dtos';
 import { ProductUpdateDto } from './dtos/product-update.dtos';
 import { Product } from './models/product';
 import { ProductService } from './product.service';
+import {AuthGuard} from "../auth/auth.guard";
+import {FileInterceptor} from "@nestjs/platform-express";
 
+@UseGuards(AuthGuard)
 @Controller('products')
 export class ProductController {
 
@@ -26,7 +41,8 @@ export class ProductController {
 
     @Put(':id')
     async update(@Param('id') id: number, @Body() body: ProductUpdateDto): Promise<Product> {
-        return await this.productService.update(id, body);
+        await this.productService.update(id, body);
+        return await this.productService.findOne({id: id},);
     }
 
     @Delete(':id')

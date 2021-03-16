@@ -9,4 +9,5 @@ export class ProductService extends AbstractService {
     constructor(@InjectRepository(Product) private readonly productRepository: Repository<Product>) {
         super(productRepository);
     }
+
 }

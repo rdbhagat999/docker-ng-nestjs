@@ -15,13 +15,13 @@ export class UserService extends AbstractService {
 
         const {data, meta} = await super.paginate(page, take, relations);
 
-        const usersExcludePasswprd = data.map(user => {
+        const usersExcludePassword = data.map(user => {
             const {password, ...data} = user;
             return data;
         });
 
         return {
-            data: usersExcludePasswprd,
+            data: usersExcludePassword,
             meta
         }
     }
