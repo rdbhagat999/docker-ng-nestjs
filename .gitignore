@@ -1,6 +1,11 @@
 # compiled output
 /dist
 /node_modules
+/.dbdata/**/*
+.dbdata/**/*
+
+.*
+!/.gitignore
 
 # Logs
 logs
