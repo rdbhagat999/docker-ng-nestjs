@@ -2,9 +2,9 @@ import {
     BadRequestException,
     Body,
     ClassSerializerInterceptor,
-    Controller,
+    Controller, Delete,
     Get, Param,
-    Post, UseGuards,
+    Post, Put, UseGuards,
     UseInterceptors
 } from '@nestjs/common';
 import {UserService} from "./user.service";
@@ -13,6 +13,7 @@ import * as bcrypt from 'bcryptjs';
 import {RegisterDto} from "../auth/dtos/register.dto";
 import {UserCreateDto} from "./dtos/user-create.dto";
 import {AuthGuard} from "../auth/auth.guard";
+import { UserUpdateDto } from './dtos/user-update.dtp';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
@@ -42,5 +43,16 @@ export class UserController {
     @Get(':id')
     async get(@Param('id') id: number): Promise<User> {
         return this.userService.findOne({id: id});
+    }
+
+    @Put(':id')
+    async update(@Param('id') id: number, @Body() body: UserUpdateDto): Promise<User> {
+        await this.userService.update(id, body);
+        return this.userService.findOne({id: id});
+    }
+
+    @Delete(':id')
+    async delete(@Param('id') id: number): Promise<any> {
+        return this.userService.delete(id);
     }
 }
