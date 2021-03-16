@@ -1,4 +1,10 @@
-import {Entity} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity('permissions')
-export class Permission {}
+export class Permission {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column({ unique: true })
+    name: string;
+}

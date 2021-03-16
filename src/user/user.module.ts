@@ -4,9 +4,10 @@ import { User } from './user';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import {CommonModule} from "../common/common.module";
+import {AuthModule} from "../auth/auth.module";
 
 @Module({
-  imports: [ CommonModule, TypeOrmModule.forFeature([User]) ],
+  imports: [ CommonModule, AuthModule, TypeOrmModule.forFeature([User]) ],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],

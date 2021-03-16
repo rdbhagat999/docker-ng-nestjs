@@ -17,12 +17,13 @@ import {loginDto} from "./dtos/login.dto";
 import {JwtService} from "@nestjs/jwt";
 import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
+import {AuthService} from "./auth.service";
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller()
 export class AuthController {
 
-    constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
+    constructor(private readonly userService: UserService, private readonly authService: AuthService, private readonly jwtService: JwtService) {}
 
     @Post('register')
     async register(@Body() body: RegisterDto): Promise<User> {
@@ -30,7 +31,7 @@ export class AuthController {
             throw new BadRequestException('Passwords do not match!');
         }
         const hashed = await bcrypt.hash(body.password, 12);
-        return this.userService.create({
+        return await this.userService.create({
             firstName: body.firstName,
             lastName: body.lastName,
             email: body.email,
@@ -67,9 +68,8 @@ export class AuthController {
     @UseGuards(AuthGuard)
     @Get('user')
     async user(@Req() request: Request ) {
-        const token = request.cookies['token'];
-        const data = await this.jwtService.verifyAsync(token);
-        const user = await this.userService.findOne({id: data['id']});
+        const id = this.authService.userId(request);
+        const user = await this.userService.findOne({id}, ['role']);
         if(! user) {
             throw new NotFoundException('User not found!');
         }
