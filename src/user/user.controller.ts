@@ -36,7 +36,8 @@ export class UserController {
             firstName: body.firstName,
             lastName: body.lastName,
             email: body.email,
-            password: hashed
+            password: hashed,
+            role: {id: body.roleId}
         });
     }
 
@@ -47,7 +48,11 @@ export class UserController {
 
     @Put(':id')
     async update(@Param('id') id: number, @Body() body: UserUpdateDto): Promise<User> {
-        await this.userService.update(id, body);
+        const {roleId, ...data} = body;
+        await this.userService.update(id, {
+            ...data,
+            role: {id: roleId}
+        });
         return this.userService.findOne({id: id});
     }
 

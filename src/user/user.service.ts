@@ -50,14 +50,15 @@ export class UserService {
     }
 
     async create(data): Promise<User> {
-        return this.userRepository.save(data);
+        const {password, ...user} = await this.userRepository.save(data);
+        return user;
     }
 
     async update(id: number, data): Promise<any> {
-        return this.userRepository.update(id, data);
+        return await this.userRepository.update(id, data);
     }
 
     async delete(id: number): Promise<any> {
-        return this.userRepository.delete(id);
+        return await this.userRepository.delete(id);
     }
 }
