@@ -13,7 +13,7 @@ import * as bcrypt from 'bcryptjs';
 import {RegisterDto} from "../auth/dtos/register.dto";
 import {UserCreateDto} from "./dtos/user-create.dto";
 import {AuthGuard} from "../auth/auth.guard";
-import { UserUpdateDto } from './dtos/user-update.dtp';
+import { UserUpdateDto } from './dtos/user-update.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)

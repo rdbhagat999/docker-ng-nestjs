@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import {ThrottlerGuard, ThrottlerModule} from "@nestjs/throttler";
 import {APP_GUARD} from "@nestjs/core";
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import {APP_GUARD} from "@nestjs/core";
     autoLoadEntities: true, // don't use in production mode because it will always migrate database
     synchronize: true,
   }), 
-  UserModule, AuthModule, CommonModule,],
+  UserModule, AuthModule, CommonModule, RoleModule,],
   controllers: [AppController],
   providers: [{
     provide: APP_GUARD,
