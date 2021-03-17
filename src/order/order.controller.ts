@@ -14,6 +14,7 @@ import {Response} from 'express';
 import {parse} from "json2csv";
 import {Order} from "./models/order";
 import {OrderItem} from "./models/order-item";
+import {HasPermission} from "../permission/decorators/has-permission";
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
@@ -22,22 +23,24 @@ export class OrderController {
     constructor(private readonly orderService: OrderService) {}
 
     @Get()
+    @HasPermission('orders')
     async all(@Query('page') page = 1) {
         return this.orderService.paginate(page, 15, ['orderItems']);
     }
 
     @Post('export-csv')
+    @HasPermission('orders')
     async export_csv(@Res() response: Response) {
 
         const json = [];
 
         const orders = await this.orderService.all(['orderItems']);
 
-        orders.forEach((order: Order) => {
+        orders.forEach((order: Order, index) => {
             json.push({
-                Id: order.id,
-                Name: order.name,
-                Email: order.email,
+                Id: order?.id,
+                Name: order?.name,
+                Email: order?.email,
                 Product: '',
                 Price: '',
                 Quantity: '',
@@ -48,9 +51,9 @@ export class OrderController {
                     Id: '',
                     Name: '',
                     Email: '',
-                    Product: item.productTitle,
-                    Price: item.price,
-                    Quantity: item.quantity,
+                    Product: item?.productTitle,
+                    Price: item?.price,
+                    Quantity: item?.quantity,
                 });
             });
         });
@@ -62,11 +65,10 @@ export class OrderController {
             csv = parse(json, {fields});
             console.log(csv);
         } catch (err) {
-            csv = parse([], {fields});
             console.error(err);
         }
 
-        response.header('Content-type', 'text/csv');
+        response.header('Content-Type', 'text/csv');
         response.attachment('orders.csv');
 
         return response.send(csv);

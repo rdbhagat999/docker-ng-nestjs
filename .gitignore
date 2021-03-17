@@ -8,6 +8,10 @@
 /.dbdata
 /.dbdata/
 .dbdata/
+.dbdata
+.dbdata*
+/.dbdata
+*/.dbdata*
 
 .*
 !/.gitignore

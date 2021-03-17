@@ -44,7 +44,7 @@ export class AuthController {
     @UseInterceptors(ClassSerializerInterceptor)
     @Post('login')
     async login(@Body() body: loginDto, @Res({ passthrough: true }) response: Response ) {
-        const user = await this.userService.findOne({email: body.email});
+        const user = await this.userService.findOne({email: body.email}, ['role']);
 
         if(! user) {
             throw new NotFoundException('User not found!');
