@@ -10,6 +10,7 @@ import {APP_GUARD} from "@nestjs/core";
 import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
 import { ProductModule } from './product/product.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { ProductModule } from './product/product.module';
     autoLoadEntities: true, // don't use in production mode because it will always migrate database
     synchronize: true,
   }), 
-  UserModule, AuthModule, CommonModule, RoleModule, PermissionModule, ProductModule,],
+  UserModule, AuthModule, CommonModule, RoleModule, PermissionModule, ProductModule, OrderModule,],
   controllers: [AppController],
   providers: [{
     provide: APP_GUARD,
