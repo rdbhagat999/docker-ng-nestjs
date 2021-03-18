@@ -2,16 +2,7 @@
 /dist
 /node_modules
 
-/.dbdata/**/*
 .dbdata/**/*
-*.dbdata
-/.dbdata
-/.dbdata/
-.dbdata/
-.dbdata
-.dbdata*
-/.dbdata
-*/.dbdata*
 
 .*
 !/.gitignore
