@@ -1,23 +1,21 @@
 import {
     BadRequestException,
     Body,
-    ClassSerializerInterceptor,
     Controller, Delete,
     Get, Param,
     Post, Put, Query, Req, UseGuards,
-    UseInterceptors
 } from '@nestjs/common';
 import {Request} from 'express';
 import {UserService} from "./user.service";
-import {User} from "./user";
+import {User} from "./models/user";
 import * as bcrypt from 'bcryptjs';
 import {UserCreateDto} from "./dtos/user-create.dto";
 import {AuthGuard} from "../auth/auth.guard";
 import { UserUpdateDto } from './dtos/user-update.dto';
 import {AuthService} from "../auth/auth.service";
 import {UpdatePasswordDto} from "./dtos/update-password.dto";
+import {HasPermissionDecorator} from "../utils/has-permission.decorator";
 
-@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
 @Controller('users')
 export class UserController {
@@ -25,11 +23,13 @@ export class UserController {
     constructor(private readonly userService: UserService, private readonly authService: AuthService,) {}
 
     @Get()
+    @HasPermissionDecorator('users')
     async all(@Query('page') page: number = 1) {
         return this.userService.paginate(page, 15, ['role']);
     }
 
     @Post()
+    @HasPermissionDecorator('users')
     async create(@Body() body: UserCreateDto): Promise<User> {
 
         const hashed = await bcrypt.hash('123456', 12);
@@ -44,8 +44,9 @@ export class UserController {
     }
 
     @Get(':id')
+    @HasPermissionDecorator('users')
     async get(@Param('id') id: number): Promise<User> {
-        return this.userService.findOne({id: id}, ['role']);
+        return await this.userService.findOne({id: id}, ['role']);
     }
 
     @Put('info')
@@ -70,17 +71,19 @@ export class UserController {
     }
 
     @Put(':id')
+    @HasPermissionDecorator('users')
     async update(@Param('id') id: number, @Body() body: UserUpdateDto): Promise<User> {
         const {roleId, ...data} = body;
         await this.userService.update(id, {
             ...data,
             role: {id: roleId}
         });
-        return this.userService.findOne({id: id});
+        return await this.userService.findOne({id: id}, ['role']);
     }
 
     @Delete(':id')
+    @HasPermissionDecorator('users')
     async delete(@Param('id') id: number): Promise<any> {
-        return this.userService.delete(id);
+        return await this.userService.delete(id);
     }
 }

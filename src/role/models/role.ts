@@ -1,6 +1,6 @@
 import {Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
 import {IsNotEmpty} from "class-validator";
-import {Permission} from "../permission/permission";
+import {Permission} from "../../permission/models/permission";
 
 @Entity('roles')
 export class Role {

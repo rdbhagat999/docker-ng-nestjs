@@ -1,16 +1,15 @@
 import {
     BadRequestException,
-    Body, ClassSerializerInterceptor,
+    Body,
     Controller,
     Get,
     NotFoundException,
     Post,
     Req,
     Res, UseGuards,
-    UseInterceptors
 } from '@nestjs/common';
 import {UserService} from "../user/user.service";
-import {User} from "../user/user";
+import {User} from "../user/models/user";
 import * as bcrypt from 'bcryptjs';
 import { RegisterDto } from './dtos/register.dto';
 import {loginDto} from "./dtos/login.dto";
@@ -19,7 +18,6 @@ import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
 import {AuthService} from "./auth.service";
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller()
 export class AuthController {
 
@@ -40,11 +38,9 @@ export class AuthController {
         });
     }
 
-
-    @UseInterceptors(ClassSerializerInterceptor)
     @Post('login')
     async login(@Body() body: loginDto, @Res({ passthrough: true }) response: Response ) {
-        const user = await this.userService.findOne({email: body.email});
+        const user = await this.userService.findOne({email: body.email}, ['role']);
 
         if(! user) {
             throw new NotFoundException('User not found!');
@@ -59,7 +55,7 @@ export class AuthController {
         const jwt = await this.jwtService.signAsync({ id: user.id });
 
         response.cookie('token', jwt, { httpOnly: true, sameSite: "strict", });
-        response.setHeader('token', jwt);
+        // response.setHeader('token', jwt);
 
         return user;
 
@@ -68,7 +64,7 @@ export class AuthController {
     @UseGuards(AuthGuard)
     @Get('user')
     async user(@Req() request: Request ) {
-        const id = this.authService.userId(request);
+        const id = await this.authService.userId(request);
         const user = await this.userService.findOne({id}, ['role']);
         if(! user) {
             throw new NotFoundException('User not found!');

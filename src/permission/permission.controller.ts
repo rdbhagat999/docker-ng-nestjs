@@ -1,9 +1,24 @@
-import {Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
+import {
+    Body,
+    ClassSerializerInterceptor,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Put,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
 import {PermissionService} from "./permission.service";
-import {Permission} from "./permission";
+import {Permission} from "./models/permission";
 import {PermissionUpdateDto} from "./dtos/permission-update.dto";
 import {PermissionCreateDto} from "./dtos/permission-create.dto";
+import {AuthGuard} from "../auth/auth.guard";
+import {HasPermissionDecorator} from "../utils/has-permission.decorator";
 
+@UseInterceptors(ClassSerializerInterceptor)
+@UseGuards(AuthGuard)
 @Controller('permissions')
 export class PermissionController {
     constructor(private readonly permissionService: PermissionService) {

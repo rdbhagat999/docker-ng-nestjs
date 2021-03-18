@@ -27,11 +27,6 @@ export abstract class AbstractService {
             relations
         });
 
-        // const usersExcludePasswprd = rows.map(row => {
-        //     const {password, ...data} = row;
-        //     return data;
-        // });
-
         return {
             data: rows,
             meta: {
@@ -39,7 +34,7 @@ export abstract class AbstractService {
                 page,
                 take,
                 skip,
-                last_page: Math.ceil(total / take)
+                last_page: (page == 1 && total <= take) ? 1 : Math.ceil(total / take)
             }
         }
     }
