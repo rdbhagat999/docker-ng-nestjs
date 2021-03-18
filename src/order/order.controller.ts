@@ -1,12 +1,10 @@
 import {
-    ClassSerializerInterceptor,
     Controller,
     Get, Param,
     Post,
     Query,
     Res,
     UseGuards,
-    UseInterceptors
 } from '@nestjs/common';
 import {OrderService} from "./order.service";
 import {AuthGuard} from "../auth/auth.guard";
@@ -16,7 +14,6 @@ import {Order} from "./models/order";
 import {OrderItem} from "./models/order-item";
 import {HasPermission} from "../permission/decorators/has-permission";
 
-@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
 @Controller('orders')
 export class OrderController {
@@ -25,13 +22,13 @@ export class OrderController {
     @Get()
     @HasPermission('orders')
     async all(@Query('page') page = 1) {
-        return this.orderService.paginate(page, 15, ['orderItems']);
+        return await this.orderService.paginate(page, 15, ['orderItems']);
     }
 
     @Get(':id')
     @HasPermission('orders')
     async get(@Param('id') id: string, @Query('page') page = 1) {
-        return this.orderService.findOne({id}, ['orderItems']);
+        return await this.orderService.findOne({id}, ['orderItems']);
     }
 
     @Post('export-csv')

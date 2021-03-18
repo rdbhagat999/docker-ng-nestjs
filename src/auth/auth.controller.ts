@@ -1,13 +1,12 @@
 import {
     BadRequestException,
-    Body, ClassSerializerInterceptor,
+    Body,
     Controller,
     Get,
     NotFoundException,
     Post,
     Req,
     Res, UseGuards,
-    UseInterceptors
 } from '@nestjs/common';
 import {UserService} from "../user/user.service";
 import {User} from "../user/models/user";
@@ -19,7 +18,6 @@ import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
 import {AuthService} from "./auth.service";
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller()
 export class AuthController {
 
@@ -40,8 +38,6 @@ export class AuthController {
         });
     }
 
-
-    @UseInterceptors(ClassSerializerInterceptor)
     @Post('login')
     async login(@Body() body: loginDto, @Res({ passthrough: true }) response: Response ) {
         const user = await this.userService.findOne({email: body.email}, ['role']);
@@ -59,7 +55,7 @@ export class AuthController {
         const jwt = await this.jwtService.signAsync({ id: user.id });
 
         response.cookie('token', jwt, { httpOnly: true, sameSite: "strict", });
-        response.setHeader('token', jwt);
+        // response.setHeader('token', jwt);
 
         return user;
 

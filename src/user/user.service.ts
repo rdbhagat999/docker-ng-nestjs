@@ -12,23 +12,18 @@ export class UserService extends AbstractService {
         super(userRepository);
     }
 
-    async paginate(page = 1, take = 15, relations= []): Promise<any> {
-
-        const {data, meta} = await super.paginate(page, take, relations);
-
-        // const usersExcludePassword = data.map(user => {
-        //     const {password, ...data} = user;
-        //     return data;
-        // });
-
-        return {
-            data: classToPlain(data),
-            meta
-        }
-    }
-
-    async create(data): Promise<any> {
-        const user = await super.create(data);;
-        return classToPlain(user);
-    }
+    // async paginate(page = 1, take = 15, relations= []): Promise<any> {
+    //
+    //     const {data, meta} = await super.paginate(page, take, relations);
+    //
+    //     return {
+    //         data,
+    //         meta
+    //     }
+    // }
+    //
+    // async create(data): Promise<any> {
+    //     const user = await super.create(data);;
+    //     return user;
+    // }
 }

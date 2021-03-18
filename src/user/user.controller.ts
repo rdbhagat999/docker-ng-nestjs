@@ -1,11 +1,9 @@
 import {
     BadRequestException,
     Body,
-    ClassSerializerInterceptor,
     Controller, Delete,
     Get, Param,
     Post, Put, Query, Req, UseGuards,
-    UseInterceptors
 } from '@nestjs/common';
 import {Request} from 'express';
 import {UserService} from "./user.service";
@@ -18,7 +16,6 @@ import {AuthService} from "../auth/auth.service";
 import {UpdatePasswordDto} from "./dtos/update-password.dto";
 import {HasPermission} from "../permission/decorators/has-permission";
 
-@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
 @Controller('users')
 export class UserController {
@@ -49,7 +46,7 @@ export class UserController {
     @Get(':id')
     @HasPermission('users')
     async get(@Param('id') id: number): Promise<User> {
-        return this.userService.findOne({id: id}, ['role']);
+        return await this.userService.findOne({id: id}, ['role']);
     }
 
     @Put('info')
@@ -81,12 +78,12 @@ export class UserController {
             ...data,
             role: {id: roleId}
         });
-        return this.userService.findOne({id: id}, ['role']);
+        return await this.userService.findOne({id: id}, ['role']);
     }
 
     @Delete(':id')
     @HasPermission('users')
     async delete(@Param('id') id: number): Promise<any> {
-        return this.userService.delete(id);
+        return await this.userService.delete(id);
     }
 }

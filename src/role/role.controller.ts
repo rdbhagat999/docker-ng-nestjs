@@ -1,28 +1,20 @@
 import {
     Body,
-    ClassSerializerInterceptor,
     Controller,
     Delete,
     Get,
     Param,
     Post,
     Put,
-    Query,
     UseGuards,
-    UseInterceptors
 } from '@nestjs/common';
 import {RoleService} from "./role.service";
 import {Role} from "./models/role";
-import {UserCreateDto} from "../user/dtos/user-create.dto";
-import {User} from "../user/models/user";
-import * as bcrypt from "bcryptjs";
-import {UserUpdateDto} from "../user/dtos/user-update.dto";
 import {RoleCreateDto} from "./dtos/role-create.dto";
 import {RoleUpdateDto} from "./dtos/role-update.dto";
 import {AuthGuard} from "../auth/auth.guard";
 import {HasPermission} from "../permission/decorators/has-permission";
 
-@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
 @Controller('roles')
 export class RoleController {

@@ -7,9 +7,7 @@ import {
     Post,
     Put,
     Query,
-    UploadedFile,
     UseGuards,
-    UseInterceptors
 } from '@nestjs/common';
 import { ProductCreateDto } from './dtos/product-create.dtos';
 import { ProductUpdateDto } from './dtos/product-update.dtos';
