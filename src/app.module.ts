@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import {Module, ValidationPipe} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -34,13 +34,18 @@ import {DataPipe} from "./utils/data.pipe";
   }), 
   UserModule, AuthModule, CommonModule, RoleModule, PermissionModule, ProductModule, OrderModule,],
   controllers: [AppController],
-  providers: [{
-    provide: APP_GUARD,
-    useClass: ThrottlerGuard
-  },
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard
+    },
     {
       provide: APP_INTERCEPTOR,
       useClass: DataInterceptor
+    },
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe
     },
     {
       provide: APP_PIPE,
