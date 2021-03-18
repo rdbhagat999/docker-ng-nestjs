@@ -6,13 +6,14 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import {ThrottlerGuard, ThrottlerModule} from "@nestjs/throttler";
-import {APP_GUARD, APP_INTERCEPTOR} from "@nestjs/core";
+import {APP_GUARD, APP_INTERCEPTOR, APP_PIPE} from "@nestjs/core";
 import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import {PermissionGuard} from "./permission/permission.guard";
 import {DataInterceptor} from "./utils/data.interceptor";
+import {DataPipe} from "./utils/data.pipe";
 
 @Module({
   imports: [
@@ -36,15 +37,21 @@ import {DataInterceptor} from "./utils/data.interceptor";
   providers: [{
     provide: APP_GUARD,
     useClass: ThrottlerGuard
-  }, {
-    provide: APP_GUARD,
-    useClass: PermissionGuard
   },
     {
       provide: APP_INTERCEPTOR,
       useClass: DataInterceptor
     },
-    AppService],
+    {
+      provide: APP_PIPE,
+      useClass: DataPipe
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard
+    },
+    AppService,
+  ],
 })
 export class AppModule {}
 

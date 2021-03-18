@@ -12,7 +12,7 @@ import {Response} from 'express';
 import {parse} from "json2csv";
 import {Order} from "./models/order";
 import {OrderItem} from "./models/order-item";
-import {HasPermission} from "../permission/decorators/has-permission";
+import {HasPermissionDecorator} from "../utils/has-permission.decorator";
 
 @UseGuards(AuthGuard)
 @Controller('orders')
@@ -20,19 +20,19 @@ export class OrderController {
     constructor(private readonly orderService: OrderService) {}
 
     @Get()
-    @HasPermission('orders')
+    @HasPermissionDecorator('orders')
     async all(@Query('page') page = 1) {
         return await this.orderService.paginate(page, 15, ['orderItems']);
     }
 
     @Get(':id')
-    @HasPermission('orders')
+    @HasPermissionDecorator('orders')
     async get(@Param('id') id: string, @Query('page') page = 1) {
         return await this.orderService.findOne({id}, ['orderItems']);
     }
 
     @Post('export-csv')
-    @HasPermission('orders')
+    @HasPermissionDecorator('orders')
     async export_csv(@Res() response: Response) {
 
         const json = [];

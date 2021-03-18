@@ -13,7 +13,7 @@ import {Role} from "./models/role";
 import {RoleCreateDto} from "./dtos/role-create.dto";
 import {RoleUpdateDto} from "./dtos/role-update.dto";
 import {AuthGuard} from "../auth/auth.guard";
-import {HasPermission} from "../permission/decorators/has-permission";
+import {HasPermissionDecorator} from "../utils/has-permission.decorator";
 
 @UseGuards(AuthGuard)
 @Controller('roles')
@@ -22,13 +22,13 @@ export class RoleController {
     }
 
     @Get()
-    @HasPermission('roles')
+    @HasPermissionDecorator('roles')
     async all(): Promise<Role[]> {
         return await this.roleService.all(['permissions']);
     }
 
     @Post()
-    @HasPermission('roles')
+    @HasPermissionDecorator('roles')
     async create(@Body() body: RoleCreateDto): Promise<Role> {
         return await this.roleService.create({
             name: body.name,
@@ -37,13 +37,13 @@ export class RoleController {
     }
 
     @Get(':id')
-    @HasPermission('roles')
+    @HasPermissionDecorator('roles')
     async get(@Param('id') id: number): Promise<Role> {
         return await this.roleService.findOne({id: id},  ['permissions']);
     }
 
     @Put(':id')
-    @HasPermission('roles')
+    @HasPermissionDecorator('roles')
     async update(@Param('id') id: number, @Body() body: RoleUpdateDto): Promise<Role> {
         const {permissionIds, name} = body;
         const permissions = permissionIds.map(id => ({id}));
@@ -58,7 +58,7 @@ export class RoleController {
     }
 
     @Delete(':id')
-    @HasPermission('roles')
+    @HasPermissionDecorator('roles')
     async delete(@Param('id') id: number): Promise<any> {
         return await this.roleService.delete(id);
     }

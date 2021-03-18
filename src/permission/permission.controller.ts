@@ -15,7 +15,7 @@ import {Permission} from "./models/permission";
 import {PermissionUpdateDto} from "./dtos/permission-update.dto";
 import {PermissionCreateDto} from "./dtos/permission-create.dto";
 import {AuthGuard} from "../auth/auth.guard";
-import {HasPermission} from "./decorators/has-permission";
+import {HasPermissionDecorator} from "../utils/has-permission.decorator";
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
