@@ -4,6 +4,7 @@ import {User} from "./models/user";
 import {Repository} from "typeorm";
 import {AbstractService} from "../common/abstract/abstract.service";
 import {PaginatedResult} from "../common/paginated-result.interface";
+import {classToPlain} from "class-transformer";
 
 @Injectable()
 export class UserService extends AbstractService {
@@ -11,23 +12,23 @@ export class UserService extends AbstractService {
         super(userRepository);
     }
 
-    async paginate(page = 1, take = 15, relations= []): Promise<PaginatedResult> {
+    async paginate(page = 1, take = 15, relations= []): Promise<any> {
 
         const {data, meta} = await super.paginate(page, take, relations);
 
-        const usersExcludePassword = data.map(user => {
-            const {password, ...data} = user;
-            return data;
-        });
+        // const usersExcludePassword = data.map(user => {
+        //     const {password, ...data} = user;
+        //     return data;
+        // });
 
         return {
-            data: usersExcludePassword,
+            data: classToPlain(data),
             meta
         }
     }
 
-    async create(data): Promise<User> {
-        const {password, ...user} = await super.create(data);;
-        return user;
+    async create(data): Promise<any> {
+        const user = await super.create(data);;
+        return classToPlain(user);
     }
 }

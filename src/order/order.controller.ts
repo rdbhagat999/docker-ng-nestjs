@@ -1,7 +1,7 @@
 import {
     ClassSerializerInterceptor,
     Controller,
-    Get,
+    Get, Param,
     Post,
     Query,
     Res,
@@ -26,6 +26,12 @@ export class OrderController {
     @HasPermission('orders')
     async all(@Query('page') page = 1) {
         return this.orderService.paginate(page, 15, ['orderItems']);
+    }
+
+    @Get(':id')
+    @HasPermission('orders')
+    async get(@Param('id') id: string, @Query('page') page = 1) {
+        return this.orderService.findOne({id}, ['orderItems']);
     }
 
     @Post('export-csv')

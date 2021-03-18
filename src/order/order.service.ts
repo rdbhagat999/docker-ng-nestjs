@@ -4,6 +4,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {Order} from "./models/order";
 import {PaginatedResult} from "../common/paginated-result.interface";
+import {classToPlain} from "class-transformer";
 
 @Injectable()
 export class OrderService extends AbstractService {
@@ -11,7 +12,7 @@ export class OrderService extends AbstractService {
         super(orderRepository);
     }
 
-    async paginate(page = 1, take = 15, relations = []): Promise<PaginatedResult> {
+    async paginate(page = 1, take = 15, relations = []): Promise<any> {
         if(! page) {
             page = 1;
         }
@@ -28,17 +29,17 @@ export class OrderService extends AbstractService {
             relations
         });
 
-        const orders = rows.map((order) => ({
-            id: order.id,
-            name: order.name,
-            email: order.email,
-            createdAt: order.createdAt,
-            orderItems: order.orderItems,
-            total: order.total,
-        }));
+        // const orders = rows.map((order) => ({
+        //     id: order.id,
+        //     name: order.name,
+        //     email: order.email,
+        //     createdAt: order.createdAt,
+        //     orderItems: order.orderItems,
+        //     total: order.total,
+        // }));
 
         return {
-            data: orders,
+            data: classToPlain(rows),
             meta: {
                 total,
                 page,

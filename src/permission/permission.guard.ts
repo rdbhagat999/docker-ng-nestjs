@@ -22,7 +22,7 @@ export class PermissionGuard implements CanActivate {
     context: ExecutionContext,
   ): Promise<boolean> {
     const access = this.reflector.get<string>('access', context.getHandler());
-    console.log(access);
+    // console.log(access);
     return await this.checkPermissions(access, context);
 
   }
@@ -37,7 +37,7 @@ export class PermissionGuard implements CanActivate {
     const userId = await this.authService.userId(request);
     const user: User = await this.userService.findOne({id: userId}, ['role']);
     const userRole: Role = await this.roleService.findOne({id: user.role.id}, ['permissions']);
-    console.log(userRole);
+    // console.log(userRole);
 
     if(request.method === 'GET') {
       return userRole.permissions.some((p: Permission) => (p.name === `view_${access}`) || (p.name === `edit_${access}`));

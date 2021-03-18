@@ -1,6 +1,6 @@
 import {Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {OrderItem} from "./order-item";
-import {Expose} from "class-transformer";
+import {Exclude, Expose} from "class-transformer";
 
 @Entity('orders')
 export class Order {
@@ -8,9 +8,11 @@ export class Order {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Exclude()
     @Column()
     firstName: string;
 
+    @Exclude()
     @Column()
     lastName: string;
 
