@@ -6,16 +6,13 @@ import {
     Get,
     Param,
     Post,
-    Put,
+    Put, Query,
     UseGuards,
     UseInterceptors
 } from '@nestjs/common';
 import {PermissionService} from "./permission.service";
 import {Permission} from "./models/permission";
-import {PermissionUpdateDto} from "./dtos/permission-update.dto";
-import {PermissionCreateDto} from "./dtos/permission-create.dto";
 import {AuthGuard} from "../auth/auth.guard";
-import {HasPermissionDecorator} from "../utils/has-permission.decorator";
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
@@ -25,30 +22,12 @@ export class PermissionController {
     }
 
     @Get()
-    async all(): Promise<Permission[]> {
-        return await this.permissionService.all();
+    async all(@Query('page') page: number = 1, @Query('take') take: number = 15) {
+        return await this.permissionService.paginate(page, take,);
     }
 
     @Get(':id')
     async get(@Param('id') id: number): Promise<Permission> {
         return await this.permissionService.findOne({id: id});
     }
-
-    // @Post()
-    // async create(@Body() body: PermissionCreateDto): Promise<Permission> {
-    //     return await this.permissionService.create({
-    //         name: body.name,
-    //     });
-    // }
-
-    // @Put(':id')
-    // async update(@Param('id') id: number, @Body() body: PermissionUpdateDto): Promise<Permission> {
-    //     await this.permissionService.update(id, body);
-    //     return await this.permissionService.findOne({id: id});
-    // }
-
-    // @Delete(':id')
-    // async delete(@Param('id') id: number): Promise<any> {
-    //     return await this.permissionService.delete(id);
-    // }
 }

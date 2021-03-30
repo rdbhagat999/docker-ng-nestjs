@@ -11,6 +11,4 @@ export  class UserUpdateDto {
     @IsEmail()
     email?: string;
 
-    @IsNumber()
-    roleId?: number;
 }

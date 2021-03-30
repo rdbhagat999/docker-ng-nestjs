@@ -21,8 +21,8 @@ export class OrderController {
 
     @Get()
     @HasPermissionDecorator('orders')
-    async all(@Query('page') page = 1) {
-        return await this.orderService.paginate(page, 15, ['orderItems']);
+    async all(@Query('page') page = 1, @Query('take') take: number = 15) {
+        return await this.orderService.paginate(page, take, ['orderItems']);
     }
 
     @Get(':id')

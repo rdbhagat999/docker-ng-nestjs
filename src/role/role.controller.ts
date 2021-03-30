@@ -5,7 +5,7 @@ import {
     Get,
     Param,
     Post,
-    Put,
+    Put, Query,
     UseGuards,
 } from '@nestjs/common';
 import {RoleService} from "./role.service";
@@ -23,17 +23,18 @@ export class RoleController {
 
     @Get()
     @HasPermissionDecorator('roles')
-    async all(): Promise<Role[]> {
-        return await this.roleService.all(['permissions']);
+    async all(@Query('page') page: number = 1, @Query('take') take: number = 15) {
+        return await this.roleService.paginate(page, take,['permissions']);
     }
 
     @Post()
     @HasPermissionDecorator('roles')
     async create(@Body() body: RoleCreateDto): Promise<Role> {
-        return await this.roleService.create({
+        const { id } = await this.roleService.create({
             name: body.name,
             permissions: body.permissionIds.map(id => ({id}))
         });
+        return await this.roleService.findOne({id: id},  ['permissions']);
     }
 
     @Get(':id')
@@ -51,10 +52,11 @@ export class RoleController {
         await this.roleService.update(id, {name});
         const role = await this.roleService.findOne({id: id});
 
-        return await this.roleService.create({
+        await this.roleService.create({
             ...role,
             permissions
         });
+        return await this.roleService.findOne({id: id},  ['permissions']);
     }
 
     @Delete(':id')
