@@ -24,8 +24,8 @@ export class ProductController {
 
     @Get()
     @HasPermissionDecorator('products')
-    async paginate(@Query('page') page: number = 1) {
-        return await this.productService.paginate(page, 15,);
+    async paginate(@Query('page') page: number = 1, @Query('take') take: number = 15) {
+        return await this.productService.paginate(page, take,);
     }
 
     @Get(':id')
@@ -37,7 +37,8 @@ export class ProductController {
     @Post()
     @HasPermissionDecorator('products')
     async create(@Body() body: ProductCreateDto): Promise<Product> {
-        return await this.productService.create(body);
+        const { id } = await this.productService.create(body);
+        return await this.productService.findOne({id: id},);
     }
 
     @Put(':id')

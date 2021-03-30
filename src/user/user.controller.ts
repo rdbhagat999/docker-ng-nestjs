@@ -15,6 +15,7 @@ import { UserUpdateDto } from './dtos/user-update.dto';
 import {AuthService} from "../auth/auth.service";
 import {UpdatePasswordDto} from "./dtos/update-password.dto";
 import {HasPermissionDecorator} from "../utils/has-permission.decorator";
+import {UserUpdateByIdDto} from "./dtos/user-update-by-id.dto";
 
 @UseGuards(AuthGuard)
 @Controller('users')
@@ -24,8 +25,8 @@ export class UserController {
 
     @Get()
     @HasPermissionDecorator('users')
-    async all(@Query('page') page: number = 1) {
-        return this.userService.paginate(page, 15, ['role']);
+    async all(@Query('page') page: number = 1, @Query('take') take: number = 15) {
+        return this.userService.paginate(page, take, ['role']);
     }
 
     @Post()
@@ -34,13 +35,15 @@ export class UserController {
 
         const hashed = await bcrypt.hash('123456', 12);
 
-        return this.userService.create({
+        const { id } = await this.userService.create({
             firstName: body.firstName,
             lastName: body.lastName,
             email: body.email,
             password: hashed,
             role: {id: body.roleId}
         });
+
+        return await this.userService.findOne({id}, ['role']);
     }
 
     @Get(':id')
@@ -72,7 +75,7 @@ export class UserController {
 
     @Put(':id')
     @HasPermissionDecorator('users')
-    async update(@Param('id') id: number, @Body() body: UserUpdateDto): Promise<User> {
+    async update(@Param('id') id: number, @Body() body: UserUpdateByIdDto): Promise<User> {
         const {roleId, ...data} = body;
         await this.userService.update(id, {
             ...data,
