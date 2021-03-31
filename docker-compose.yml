@@ -20,7 +20,28 @@ services:
     volumes:
       #localDirectory:ContainerDirectory
       - ./db_data:/var/lib/mysql
-  
+
+
+  fake_smtp:
+    container_name: mailhog_smtp
+    image: mailhog/mailhog:latest
+    restart: always
+
+      #environment:
+      #MH_STORAGE: maildir
+
+    #logging:
+    #driver: 'none'  # disable saving logs
+
+    ports:
+      #localPort:ContainerPort
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+
+      #volumes:
+      #localDirectory:ContainerDirectory (WORKDIR)
+      #- ./maildir:/maildir
+
 
   backend:
     container_name: nest_backend
@@ -38,23 +59,4 @@ services:
     
     depends_on: 
       - db
-
-  fake_smtp:
-    container_name: mailhog_smtp
-    image: mailhog/mailhog:latest
-    restart: always
-
-    #environment:
-      #MH_STORAGE: maildir
-
-    #logging:
-      #driver: 'none'  # disable saving logs
-
-    ports:
-      #localPort:ContainerPort
-      - 1025:1025 # smtp server
-      - 8025:8025 # web ui
-
-    #volumes:
-      #localDirectory:ContainerDirectory (WORKDIR)
-      #- ./maildir:/maildir
+      - fake_smtp

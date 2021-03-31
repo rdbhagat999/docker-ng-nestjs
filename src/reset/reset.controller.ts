@@ -22,7 +22,7 @@ export class ResetController {
 
         await this.resetService.create(data);
 
-        const url = `http://localhost:4200/api/reset/${token}`;
+        const url = `http://localhost:4200/reset/${token}`;
 
         const messageStatus = await this.mailerService.sendMail({
             to: email,
