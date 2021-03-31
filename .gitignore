@@ -2,7 +2,11 @@
 /dist
 /node_modules
 
-.dbdata/**/*
+/db_data
+/db_data/**/*
+
+/maildir
+/maildir/**/*
 
 .*
 !/.gitignore

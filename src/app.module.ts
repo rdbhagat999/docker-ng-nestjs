@@ -14,6 +14,7 @@ import { OrderModule } from './order/order.module';
 import {PermissionGuard} from "./permission/permission.guard";
 import {DataInterceptor} from "./utils/data.interceptor";
 import {DataPipe} from "./utils/data.pipe";
+import { ResetModule } from './reset/reset.module';
 
 @Module({
   imports: [
@@ -32,7 +33,7 @@ import {DataPipe} from "./utils/data.pipe";
     autoLoadEntities: true, // don't use in production mode because it will always migrate database
     synchronize: true,
   }), 
-  UserModule, AuthModule, CommonModule, RoleModule, PermissionModule, ProductModule, OrderModule,],
+  UserModule, AuthModule, CommonModule, RoleModule, PermissionModule, ProductModule, OrderModule, ResetModule,],
   controllers: [AppController],
   providers: [
     {
