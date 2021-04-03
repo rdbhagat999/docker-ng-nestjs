@@ -1,14 +1,16 @@
-FROM node:14-buster-slim AS builder
+FROM node:14-buster-slim AS development
 
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /usr/src/app
 
-COPY package*.json /usr/src/app
+COPY package*.json ./
 
-RUN npm install
+# RUN npm install glob rimraf
 
-COPY . ./
+RUN npm install --only=development
+
+COPY . .
 
 CMD npm run start:dev

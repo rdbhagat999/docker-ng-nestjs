@@ -22,7 +22,7 @@ export class Order {
     @CreateDateColumn()
     createdAt: string;
 
-    @OneToMany(() => OrderItem, OrderItem => OrderItem.order)
+    @OneToMany(() => OrderItem, orderItem => orderItem.order)
     orderItems: OrderItem[]
 
     @Expose()
