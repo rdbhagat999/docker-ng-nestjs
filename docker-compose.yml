@@ -1,11 +1,10 @@
 version: '3.9'
 
 services:
-
   db:
     container_name: mysql_db
     image: mysql:5.7.22
-    restart: always
+    restart: unless-stopped
 
     environment:
       MYSQL_DATABASE: ngnestjs
@@ -19,22 +18,50 @@ services:
 
     volumes:
       #localDirectory:ContainerDirectory
-      - .dbdata:/var/lib/mysql
-  
+      - ./db_data:/var/lib/mysql
+
+  fake_smtp:
+    container_name: mailhog_smtp
+    image: mailhog/mailhog:latest
+    restart: unless-stopped
+
+    #environment:
+    #MH_STORAGE: maildir
+
+    #logging:
+    #driver: 'none'  # disable saving logs
+
+    ports:
+      #localPort:ContainerPort
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+
+    #volumes:
+    #localDirectory:ContainerDirectory (WORKDIR)
+    #- ./maildir:/maildir
 
   backend:
     container_name: nest_backend
     #use Dockerfile in localDirectory
-    build: .
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+
+    command: npm run start:dev
 
     ports:
       #localPort:ContainerPort
-      - 8000:3000
+      - 3000:3000
+      - 9229:9229
 
     volumes:
       #localDirectory:ContainerDirectory (WORKDIR)
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    
-    depends_on: 
+
+    restart: unless-stopped
+
+    depends_on:
       - db
+      - fake_smtp

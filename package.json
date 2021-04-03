@@ -19,10 +19,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "docker-up": "docker-compose up",
-    "docker-build-up": "docker-compose up --build -V"
+    "docker-up": "docker-compose up --remove-orphans",
+    "docker-build-up": "docker-compose up --build --remove-orphans -V"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.5.1",
     "@nestjs/common": "^7.6.13",
     "@nestjs/core": "^7.6.13",
     "@nestjs/jwt": "^7.2.0",
@@ -35,6 +36,7 @@
     "cookie-parser": "^1.4.5",
     "json2csv": "^5.0.6",
     "mysql2": "^2.2.5",
+    "nodemailer": "^6.5.0",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -52,6 +54,7 @@
     "@types/json2csv": "^5.0.1",
     "@types/multer": "^1.4.5",
     "@types/node": "^14.14.31",
+    "@types/nodemailer": "^6.4.1",
     "@types/passport-jwt": "^3.0.5",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.15.2",

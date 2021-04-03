@@ -1,4 +1,4 @@
-import {Injectable, NotFoundException, Req} from '@nestjs/common';
+import {Injectable, NotFoundException, Req, UnauthorizedException} from '@nestjs/common';
 import {Request} from "express";
 import {JwtService} from "@nestjs/jwt";
 
@@ -8,13 +8,17 @@ export class AuthService {
     constructor(private readonly jwtService: JwtService) {}
 
     async userId(request: Request): Promise<number> {
-        const token = request.cookies['token'];
-        const data = await this.jwtService.verifyAsync(token);
+        try {
+            const token = request.cookies['token'];
+            const data = await this.jwtService.verifyAsync(token);
 
-        if(! data) {
-            throw new NotFoundException('User not found!');
+            if(! data) {
+                throw new NotFoundException('User not found!');
+            }
+            return data['id'];
+        } catch (error) {
+            throw new UnauthorizedException();
         }
-        return data['id'];
     }
 
 }
